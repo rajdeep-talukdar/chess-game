@@ -10,7 +10,7 @@ medium_font = pygame.font.Font('freesansbold.ttf', 40)
 big_font = pygame.font.Font('freesansbold.ttf', 50)
 timer = pygame.time.Clock()
 fps = 60
-# game variables and images
+
 white_pieces = ['rook', 'knight', 'bishop', 'king', 'queen', 'bishop', 'knight', 'rook',
                 'pawn', 'pawn', 'pawn', 'pawn', 'pawn', 'pawn', 'pawn', 'pawn']
 white_locations = [(0, 0), (1, 0), (2, 0), (3, 0), (4, 0), (5, 0), (6, 0), (7, 0),
@@ -22,12 +22,11 @@ black_locations = [(0, 7), (1, 7), (2, 7), (3, 7), (4, 7), (5, 7), (6, 7), (7, 7
 captured_pieces_white = []
 captured_pieces_black = []
 
-# 0 - whites turn no selection: 1-whites turn piece selected: 2- black turn no selection, 3 - black turn piece selected
+
 turn_step = 0
 selection = 100
 valid_moves = []
 
-# load in game piece images (queen, king, rook, bishop, knight, pawn) x 2
 black_queen = pygame.image.load('images/black queen.png')
 black_queen = pygame.transform.scale(black_queen, (80, 80))
 black_queen_small = pygame.transform.scale(black_queen, (45, 45))
@@ -71,13 +70,12 @@ black_images = [black_pawn, black_queen, black_king, black_knight, black_rook, b
 small_black_images = [black_pawn_small, black_queen_small, black_king_small, black_knight_small,
                       black_rook_small, black_bishop_small]
 piece_list = ['pawn', 'queen', 'king', 'knight', 'rook', 'bishop']
-# check variables/ flashing counter
+
 counter = 0
 winner = ''
 game_over = False
 
 
-# draw main game board
 def draw_board():
     for i in range(32):
         column = i % 4
@@ -98,7 +96,6 @@ def draw_board():
         screen.blit(medium_font.render('FORFEIT', True, 'black'), (810, 830))
 
 
-# draw pieces onto board
 def draw_pieces():
     for i in range(len(white_pieces)):
         index = piece_list.index(white_pieces[i])
@@ -122,8 +119,6 @@ def draw_pieces():
                 pygame.draw.rect(screen, 'blue', [black_locations[i][0] * 100 + 1, black_locations[i][1] * 100 + 1,
                                                   100, 100], 2)
 
-
-# function to check all pieces valid options on board
 def check_options(pieces, locations, turn):
     moves_list = []
     all_moves_list = []
@@ -146,7 +141,6 @@ def check_options(pieces, locations, turn):
     return all_moves_list
 
 
-# check king valid moves
 def check_king(position, color):
     moves_list = []
     if color == 'white':
@@ -156,7 +150,6 @@ def check_king(position, color):
         friends_list = black_locations
         enemies_list = white_locations
 
-    # 8 squares to check for kings, they can go one square any direction
     targets = [(1, 0), (1, 1), (1, -1), (-1, 0), (-1, 1), (-1, -1), (0, 1), (0, -1)]
     for i in range(8):
         target = (position[0] + targets[i][0], position[1] + targets[i][1])
@@ -165,7 +158,6 @@ def check_king(position, color):
     return moves_list
 
 
-# check queen valid moves
 def check_queen(position, color):
     moves_list = check_bishop(position, color)
     second_list = check_rook(position, color)
@@ -174,7 +166,6 @@ def check_queen(position, color):
     return moves_list
 
 
-# check bishop moves
 def check_bishop(position, color):
     moves_list = []
     if color == 'white':
@@ -183,7 +174,8 @@ def check_bishop(position, color):
     else:
         friends_list = black_locations
         enemies_list = white_locations
-    for i in range(4):  # up-right, up-left, down-right, down-left
+      
+    for i in range(4):
         path = True
         chain = 1
         if i == 0:
@@ -210,7 +202,6 @@ def check_bishop(position, color):
     return moves_list
 
 
-# check rook moves
 def check_rook(position, color):
     moves_list = []
     if color == 'white':
@@ -219,7 +210,8 @@ def check_rook(position, color):
     else:
         friends_list = black_locations
         enemies_list = white_locations
-    for i in range(4):  # down, up, right, left
+      
+    for i in range(4):
         path = True
         chain = 1
         if i == 0:
@@ -246,7 +238,6 @@ def check_rook(position, color):
     return moves_list
 
 
-# check valid pawn moves
 def check_pawn(position, color):
     moves_list = []
     if color == 'white':
@@ -274,7 +265,6 @@ def check_pawn(position, color):
     return moves_list
 
 
-# check valid knight moves
 def check_knight(position, color):
     moves_list = []
     if color == 'white':
@@ -283,7 +273,7 @@ def check_knight(position, color):
     else:
         friends_list = black_locations
         enemies_list = white_locations
-    # 8 squares to check for knights, they can go two squares in one direction and one in another
+
     targets = [(1, 2), (1, -2), (2, 1), (2, -1), (-1, 2), (-1, -2), (-2, 1), (-2, -1)]
     for i in range(8):
         target = (position[0] + targets[i][0], position[1] + targets[i][1])
@@ -292,7 +282,6 @@ def check_knight(position, color):
     return moves_list
 
 
-# check for valid moves for just selected piece
 def check_valid_moves():
     if turn_step < 2:
         options_list = white_options
@@ -302,7 +291,6 @@ def check_valid_moves():
     return valid_options
 
 
-# draw valid moves on screen
 def draw_valid(moves):
     if turn_step < 2:
         color = 'red'
@@ -312,7 +300,6 @@ def draw_valid(moves):
         pygame.draw.circle(screen, color, (moves[i][0] * 100 + 50, moves[i][1] * 100 + 50), 5)
 
 
-# draw captured pieces on side of screen
 def draw_captured():
     for i in range(len(captured_pieces_white)):
         captured_piece = captured_pieces_white[i]
@@ -324,7 +311,6 @@ def draw_captured():
         screen.blit(small_white_images[index], (925, 5 + 50 * i))
 
 
-# draw a flashing square around king if in check
 def draw_check():
     if turn_step < 2:
         if 'king' in white_pieces:
@@ -352,7 +338,7 @@ def draw_game_over():
     screen.blit(font.render(f'Press ENTER to Restart!', True, 'white'), (210, 240))
 
 
-# main game loop
+
 black_options = check_options(black_pieces, black_locations, 'black')
 white_options = check_options(white_pieces, white_locations, 'white')
 run = True
@@ -370,7 +356,7 @@ while run:
     if selection != 100:
         valid_moves = check_valid_moves()
         draw_valid(valid_moves)
-    # event handling
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False

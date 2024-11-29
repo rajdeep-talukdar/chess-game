@@ -22,7 +22,6 @@ black_locations = [(0, 7), (1, 7), (2, 7), (3, 7), (4, 7), (5, 7), (6, 7), (7, 7
 captured_pieces_white = []
 captured_pieces_black = []
 
-
 turn_step = 0
 selection = 100
 valid_moves = []
@@ -74,7 +73,6 @@ piece_list = ['pawn', 'queen', 'king', 'knight', 'rook', 'bishop']
 counter = 0
 winner = ''
 game_over = False
-
 
 def draw_board():
     for i in range(32):
@@ -140,7 +138,6 @@ def check_options(pieces, locations, turn):
         all_moves_list.append(moves_list)
     return all_moves_list
 
-
 def check_king(position, color):
     moves_list = []
     if color == 'white':
@@ -165,7 +162,6 @@ def check_queen(position, color):
         moves_list.append(second_list[i])
     return moves_list
 
-
 def check_bishop(position, color):
     moves_list = []
     if color == 'white':
@@ -174,7 +170,6 @@ def check_bishop(position, color):
     else:
         friends_list = black_locations
         enemies_list = white_locations
-      
     for i in range(4):
         path = True
         chain = 1
@@ -201,7 +196,6 @@ def check_bishop(position, color):
                 path = False
     return moves_list
 
-
 def check_rook(position, color):
     moves_list = []
     if color == 'white':
@@ -210,7 +204,6 @@ def check_rook(position, color):
     else:
         friends_list = black_locations
         enemies_list = white_locations
-      
     for i in range(4):
         path = True
         chain = 1
@@ -281,7 +274,6 @@ def check_knight(position, color):
             moves_list.append(target)
     return moves_list
 
-
 def check_valid_moves():
     if turn_step < 2:
         options_list = white_options
@@ -290,7 +282,6 @@ def check_valid_moves():
     valid_options = options_list[selection]
     return valid_options
 
-
 def draw_valid(moves):
     if turn_step < 2:
         color = 'red'
@@ -298,7 +289,6 @@ def draw_valid(moves):
         color = 'blue'
     for i in range(len(moves)):
         pygame.draw.circle(screen, color, (moves[i][0] * 100 + 50, moves[i][1] * 100 + 50), 5)
-
 
 def draw_captured():
     for i in range(len(captured_pieces_white)):
@@ -309,7 +299,6 @@ def draw_captured():
         captured_piece = captured_pieces_black[i]
         index = piece_list.index(captured_piece)
         screen.blit(small_white_images[index], (925, 5 + 50 * i))
-
 
 def draw_check():
     if turn_step < 2:
@@ -336,8 +325,6 @@ def draw_game_over():
     pygame.draw.rect(screen, 'black', [200, 200, 400, 70])
     screen.blit(font.render(f'{winner} won the game!', True, 'white'), (210, 210))
     screen.blit(font.render(f'Press ENTER to Restart!', True, 'white'), (210, 240))
-
-
 
 black_options = check_options(black_pieces, black_locations, 'black')
 white_options = check_options(white_pieces, white_locations, 'white')
